@@ -14,8 +14,8 @@
 package entity
 
 import (
-	"encoding/json"
 	"fmt"
+	"github.com/cloudwego-contrib/cwgo-pkg/registry/zookeeper/zookeeperkitex/entity"
 	"net"
 	"strings"
 
@@ -23,25 +23,12 @@ import (
 	"github.com/kitex-contrib/registry-zookeeper/utils"
 )
 
-type RegistryEntity struct {
-	Weight int
-	Tags   map[string]string
-}
+type RegistryEntity = entity.RegistryEntity
 
-type NodeEntity struct {
-	*registry.Info
-}
-
-func (n *NodeEntity) Path() (string, error) {
-	return buildPath(n.Info)
-}
-
-func (n *NodeEntity) Content() ([]byte, error) {
-	return json.Marshal(&RegistryEntity{Weight: n.Weight, Tags: n.Tags})
-}
+type NodeEntity = entity.NodeEntity
 
 func MustNewNodeEntity(ri *registry.Info) *NodeEntity {
-	return &NodeEntity{ri}
+	return entity.MustNewNodeEntity(ri)
 }
 
 // path format as follows:
