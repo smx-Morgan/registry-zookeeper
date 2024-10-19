@@ -32,6 +32,6 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/cloudwego-contrib/cwgo-pkg/registry/zookeeper => ../cwgo-pkg-registry/registry/zookeeper
+replace github.com/cloudwego-contrib/cwgo-pkg/registry/zookeeper => github.com/smx-Morgan/cwgo-pkg/registry/zookeeper v0.0.0-20241016000926-d56ef7e0f578
 
 replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
