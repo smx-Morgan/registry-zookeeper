@@ -14,13 +14,8 @@
 package entity
 
 import (
-	"fmt"
 	"github.com/cloudwego-contrib/cwgo-pkg/registry/zookeeper/zookeeperkitex/entity"
-	"net"
-	"strings"
-
 	"github.com/cloudwego/kitex/pkg/registry"
-	"github.com/kitex-contrib/registry-zookeeper/utils"
 )
 
 type RegistryEntity = entity.RegistryEntity
@@ -29,41 +24,4 @@ type NodeEntity = entity.NodeEntity
 
 func MustNewNodeEntity(ri *registry.Info) *NodeEntity {
 	return entity.MustNewNodeEntity(ri)
-}
-
-// path format as follows:
-// /{serviceName}/{ip}:{port}
-func buildPath(info *registry.Info) (string, error) {
-	var path string
-	if info == nil {
-		return "", fmt.Errorf("registry info can't be nil")
-	}
-	if info.ServiceName == "" {
-		return "", fmt.Errorf("registry info service name can't be empty")
-	}
-	if info.Addr == nil {
-		return "", fmt.Errorf("registry info addr can't be nil")
-	}
-	if !strings.HasPrefix(info.ServiceName, utils.Separator) {
-		path = utils.Separator + info.ServiceName
-	}
-
-	if host, port, err := net.SplitHostPort(info.Addr.String()); err == nil {
-		if port == "" {
-			return "", fmt.Errorf("registry info addr missing port")
-		}
-		ip := net.ParseIP(host)
-		if ip == nil || ip.IsUnspecified() {
-			ipv4, err := utils.GetLocalIPv4Address()
-			if err != nil {
-				return "", fmt.Errorf("get local ipv4 error, cause %w", err)
-			}
-			path = path + utils.Separator + ipv4 + ":" + port
-		} else {
-			path = path + utils.Separator + host + ":" + port
-		}
-	} else {
-		return "", fmt.Errorf("parse registry info addr error")
-	}
-	return path, nil
 }
